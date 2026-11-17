@@ -38,7 +38,6 @@ services:
     Playbloom\:
         resource: '../src/'
         exclude:
-            - '../src/DependencyInjection/'
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
