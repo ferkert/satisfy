@@ -1,26 +1,21 @@
 {% extends "base.html.twig" %}
+{% from '_icons.html.twig' import icon %}
 
-{% block title %}Satis build{% endblock %}
+{% block title %}Build packages{% endblock %}
 
-{% block content %}
-    <pre id="satisOutput"></pre>
+{% block lead %}
+    <p class="page-lead">Satis reads all repositories and writes a new package index. The build starts when this page opens.</p>
 {% endblock %}
 
-{% block javascript %}
-    <script type="text/javascript">
-    $(function(){
-        var output = $("#satisOutput");
-        var outputSource = new EventSource("{{ path('satis_build_run') }}");
-        outputSource.onmessage = function(event){
-            if (event.data == '__done__') {
-                outputSource.close();
-                return;
-            }
-            output
-                .append(event.data)
-                .append("\n");
-            window.scrollTo(0, document.body.scrollHeight);
-        };
-    });
-    </script>
+{% block content %}
+    <section class="console" data-build-log data-source="{{ path('satis_build_run') }}" data-state="running" aria-labelledby="console-title">
+        <div class="console-bar">
+            <h2 class="console-title" id="console-title">{{ icon('terminal') }} satis build</h2>
+            <output class="console-status" data-build-status>Starting build…</output>
+        </div>
+        <pre class="console-output" data-build-output></pre>
+    </section>
+    <noscript>
+        <p class="alert theme-warning mt-3">The build log needs JavaScript.</p>
+    </noscript>
 {% endblock %}

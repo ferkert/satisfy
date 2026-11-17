@@ -1,0 +1,11 @@
+{
+    "name": "satisfy-assets",
+    "private": true,
+    "description": "Frontend dependencies of Satisfy. They are copied to public/ and served from there, so the UI never loads files from a CDN.",
+    "scripts": {
+        "assets": "mkdir -p public/css && cp node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/bootstrap/dist/css/bootstrap.min.css.map public/css/"
+    },
+    "devDependencies": {
+        "bootstrap": "6.0.0-alpha.1"
+    }
+}

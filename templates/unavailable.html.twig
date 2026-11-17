@@ -2,14 +2,13 @@
 
 {% block title %}Composer Repository currently not available{% endblock %}
 
-{% block header %}
-    Composer Repository currently not available
+{% block lead %}
+    <p class="page-lead">Satis has not built the package index yet, or the last build did not create a valid <span class="font-monospace">packages.json</span>.</p>
 {% endblock %}
 
 {% block content %}
-    <p class="alert alert-info">Maybe »Satis« was not started before or did not build a valid <code>package.json</code> file yet.</p>
-
-    <a href="{{ path('repository') }}" class="btn btn-large btn-block btn-primary">
-        Manage Repositories
-    </a>
+    <div class="form-actions">
+        <a href="{{ path('satis_build') }}" class="btn btn-solid theme-primary">Build packages</a>
+        <a href="{{ path('repository') }}" class="btn btn-outline theme-secondary">Manage repositories</a>
+    </div>
 {% endblock %}

@@ -2,21 +2,20 @@
 
 {% block title %}Delete repository{% endblock %}
 
-{% block content %}
-    {{ form_start(form) }}
-        <h2 class="form-signin-heading">
-            Delete repository ?
-        </h2>
+{% block lead %}
+    <p class="page-lead">Its packages disappear from the package index with the next build.</p>
+{% endblock %}
 
-        <div class="control-group error">
-            <input type="text" disabled="disabled" value="{{ repository.url }}" class="input-block-level"/>
-        </div>
+{% block content %}
+    {{ form_start(form, {attr: {class: 'form-panel'}}) }}
+        <p class="delete-target font-monospace">{{ repository.url }}</p>
 
         {{ form_errors(form) }}
         {{ form_widget(form) }}
 
-        <button class="btn btn-large btn-block btn-danger" type="submit" name="delete_form[submit]">
-            Confirm deletion</button>
-        <a href="{{ path('repository') }}" class="btn btn-large btn-block btn-inverse" >Cancel</a>
+        <div class="form-actions">
+            <button class="btn btn-solid theme-danger" type="submit" name="delete_form[submit]">Delete repository</button>
+            <a href="{{ path('repository') }}" class="btn btn-text theme-secondary">Cancel</a>
+        </div>
     {{ form_end(form) }}
 {% endblock %}

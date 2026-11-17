@@ -1,39 +1,58 @@
 {% extends "base.html.twig" %}
+{% from '_icons.html.twig' import icon %}
 
-{% block content %}
-<pre>
-    <span class="badge badge-info pull-right" rel="tooltip" data-placement="auto bottom" data-title="Add this to your 'composer.json' to require packages from this server.">?</span>
-<code>{{ config|json_encode(constant('JSON_PRETTY_PRINT')) }}</code>
-</pre>
+{% block title %}Repositories{% endblock %}
 
-    <a href="{{ path('repository_new') }}" class="btn btn-large btn-block btn-primary">
-        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
-        Add a new repository
-    </a>
-
-    <a href="{{ path('repository_upload') }}" class="btn btn-large btn-block btn-primary">
-        <i class="glyphicon glyphicon-upload" aria-hidden="true"></i>
-        Add all repositories from a composer.lock
-    </a>
-
-    <a href="{{ path('configuration') }}" class="btn btn-large btn-block btn-primary">
-        <i class="glyphicon glyphicon-check" aria-hidden="true"></i>
-        Edit configuration
-    </a>
-    <a href="{{ path('satis_build') }}" class="btn btn-large btn-block btn-primary">
-        <i class="glyphicon glyphicon-refresh" aria-hidden="true"></i>
-        Build packages
-    </a>
-
-    <ul class="nav nav-pills nav-stacked">
-    {% for repository in repositories %}
-        <li>
-            <a href="{{ path('repository_edit', {'repository': repository.id }) }}">
-                {{ repository.url }}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
+{% block lead %}
+    <p class="page-lead">Satis reads packages from these repositories and publishes them as one Composer repository.</p>
 {% endblock %}
 
+{% block actions %}
+    <a href="{{ path('repository_upload') }}" class="btn btn-outline theme-secondary">
+        {{ icon('upload') }} Import composer.lock
+    </a>
+    <a href="{{ path('repository_new') }}" class="btn btn-solid theme-primary">
+        {{ icon('plus-lg') }} Add repository
+    </a>
+{% endblock %}
 
+{% block content %}
+    <section class="snippet" aria-labelledby="snippet-title">
+        <div class="snippet-header">
+            <div>
+                <h2 class="section-title" id="snippet-title">Install packages from this server</h2>
+                <p class="section-text">Add this to the <span class="font-monospace">composer.json</span> of a project.</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline theme-secondary" data-copy="#composer-snippet" hidden>
+                {{ icon('clipboard') }} <span data-copy-label aria-live="polite">Copy</span>
+            </button>
+        </div>
+        <pre class="snippet-code"><code id="composer-snippet">{{ config|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES')) }}</code></pre>
+    </section>
+
+    <section aria-labelledby="repositories-title">
+        <h2 class="section-title" id="repositories-title">
+            Sources <span class="badge badge-subtle theme-secondary">{{ repositories|length }}</span>
+        </h2>
+
+        {% if repositories is empty %}
+            <div class="empty-state">
+                <p class="empty-state-title">No repositories yet</p>
+                <p class="section-text">Add a repository by its URL, or import all repositories from a composer.lock file.</p>
+            </div>
+        {% else %}
+            <ul class="list-group repo-list">
+                {% for repository in repositories %}
+                    <li class="list-group-item">
+                        <a class="repo-link" href="{{ path('repository_edit', {repository: repository.id}) }}">
+                            <span class="badge badge-subtle theme-primary font-monospace">{{ repository.type }}</span>
+                            <span class="repo-url font-monospace">{{ repository.url }}</span>
+                            <span class="repo-source font-monospace" title="Installation source">{{ repository.installationSource }}</span>
+                            {{ icon('chevron-right') }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+{% endblock %}

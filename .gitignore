@@ -81,3 +81,7 @@ tmtags
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+###> npm ###
+/node_modules/
+###< npm ###

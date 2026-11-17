@@ -78,6 +78,19 @@ A bin shortcut to Satis is already included in Satisfy, so run the following com
 
 For example, you can trigger a package generation for your BitBucket project by setting up a BitBucket webhook to connect back to [your-satis-url]/webhook/bitbucket every time you do a code push. This is more efficient than doing a full build and avoids you having to run full builds on a frequent schedule or logging in to the admin interface just to force a build.
 
+## Frontend
+
+The admin interface uses [Bootstrap 6](https://getbootstrap.com/) (CSS only) and a small dependency-free script, `public/js/app.js`. All files are served from `public/`; the interface loads nothing from a CDN or any other external host. Icons are inline SVGs from [Bootstrap Icons](https://icons.getbootstrap.com/) in `templates/_icons.html.twig`.
+
+Bootstrap is a pinned npm dev dependency. The copied files in `public/css/` are committed, so running Satisfy does not need Node.js. To update Bootstrap, change the version in `package.json`, then copy the new files and commit them:
+
+```
+npm install
+npm run assets
+```
+
+Bootstrap 6 relies on recent CSS features (cascade layers, `light-dark()`, relative colours), so the interface needs a current browser. It follows the system light or dark mode.
+
 ## Authors
 
 * Ludovic Fleury - <ludo.fleury@gmail.com> - <http://twitter.com/ludofleury>

@@ -1,15 +1,18 @@
 {% extends "base.html.twig" %}
 
-{% block title %}New repository{% endblock %}
+{% block title %}Add repository{% endblock %}
+
+{% block lead %}
+    <p class="page-lead">Satis reads the packages of this repository on the next build.</p>
+{% endblock %}
 
 {% block content %}
-    {{ form_start(form) }}
-        <h2 class="form-signin-heading">
-            New repository
-        </h2>
-
+    {{ form_start(form, {attr: {class: 'form-panel'}}) }}
         {% include 'views/_form.html.twig' %}
 
-        <button class="btn btn-large btn-block btn-primary" type="submit">Register</button>
+        <div class="form-actions">
+            <button class="btn btn-solid theme-primary" type="submit">Add repository</button>
+            <a href="{{ path('repository') }}" class="btn btn-text theme-secondary">Cancel</a>
+        </div>
     {{ form_end(form) }}
 {% endblock %}

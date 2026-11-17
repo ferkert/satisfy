@@ -1,0 +1,475 @@
+/*
+ * Satisfy styles on top of Bootstrap 6.
+ *
+ * Token overrides stay unlayered because Bootstrap declares its tokens unlayered too.
+ * Component styles go into Bootstrap's reserved "custom" layer: they beat Bootstrap's
+ * components, while Bootstrap's helpers and utilities still win over them.
+ */
+
+/* Primary colour: Bootstrap's teal scale instead of the default blue. */
+:root {
+    --bs-primary-base: var(--bs-teal-600);
+    --bs-primary-fg: light-dark(var(--bs-teal-700), var(--bs-teal-300));
+    --bs-primary-fg-emphasis: light-dark(var(--bs-teal-800), var(--bs-teal-200));
+    /* teal-700 keeps white button text above 4.5:1 in both colour schemes */
+    --bs-primary-bg: var(--bs-teal-700);
+    --bs-primary-bg-subtle: light-dark(var(--bs-teal-100), var(--bs-teal-900));
+    --bs-primary-bg-muted: light-dark(var(--bs-teal-200), var(--bs-teal-800));
+    --bs-primary-border: light-dark(var(--bs-teal-300), var(--bs-teal-600));
+    --bs-primary-focus-ring: color-mix(in oklch, var(--bs-teal-500) 55%, var(--bs-bg-body));
+    --bs-link-color: var(--bs-primary-fg);
+
+    --app-width: 64rem;
+}
+
+@layer custom {
+    .icon {
+        flex-shrink: 0;
+        width: 1em;
+        height: 1em;
+        vertical-align: -.125em;
+    }
+
+    .skip-link {
+        position: absolute;
+        top: .5rem;
+        left: 1rem;
+        z-index: 10;
+        padding: .5rem .75rem;
+        background: var(--bs-bg-body);
+        border: var(--bs-border-width) solid var(--bs-border-color);
+        border-radius: var(--bs-radius-5);
+    }
+
+    /* Header */
+    .app-header {
+        background: var(--bs-bg-body);
+        border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+    }
+
+    .app-header-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: 1.5rem;
+        max-width: var(--app-width);
+        min-height: 3.5rem;
+    }
+
+    .app-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        font-size: 1.0625rem;
+        font-weight: 650;
+        color: var(--bs-fg-body);
+        text-decoration: none;
+    }
+
+    .app-brand .icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: var(--bs-primary-fg);
+    }
+
+    .app-repo-name {
+        margin-inline-start: -.75rem;
+        font-size: .8125rem;
+        color: var(--bs-fg-3);
+    }
+
+    .app-nav {
+        display: flex;
+        align-self: stretch;
+    }
+
+    .app-nav .nav {
+        --bs-nav-gap: 1.25rem;
+        flex-wrap: nowrap;
+    }
+
+    .app-nav .nav-link {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        white-space: nowrap;
+    }
+
+    .app-header-end {
+        display: flex;
+        gap: .25rem;
+        margin-inline-start: auto;
+    }
+
+    @media (width < 48rem) {
+        .app-header-inner {
+            padding-top: .5rem;
+        }
+
+        .app-nav {
+            flex-basis: 100%;
+            order: 3;
+            min-height: 2.75rem;
+            overflow-x: auto;
+        }
+    }
+
+    @media (width < 36rem) {
+        .app-repo-name {
+            display: none;
+        }
+    }
+
+    /* Page */
+    .app-main {
+        max-width: var(--app-width);
+        padding-block: 2rem 4rem;
+    }
+
+    .app-main > .alert {
+        margin-bottom: 1rem;
+    }
+
+    .alert > .icon {
+        margin-top: .25em;
+    }
+
+    .page-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1,
+    .login h1 {
+        margin: 0;
+        font-size: clamp(1.5rem, 1.25rem + 1vw, 1.875rem);
+        font-weight: 650;
+        letter-spacing: -.015em;
+    }
+
+    .page-lead {
+        max-width: 60ch;
+        margin: .375rem 0 0;
+        color: var(--bs-fg-2);
+    }
+
+    .page-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+    }
+
+    .page-actions:empty {
+        display: none;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        margin: 0 0 .25rem;
+        font-size: 1.0625rem;
+        font-weight: 600;
+    }
+
+    .section-text {
+        margin: 0;
+        font-size: .875rem;
+        color: var(--bs-fg-2);
+    }
+
+    /* Repository list */
+    .snippet {
+        margin-bottom: 2.5rem;
+        background: var(--bs-bg-1);
+        border: var(--bs-border-width) solid var(--bs-border-color);
+        border-radius: var(--bs-radius-7);
+    }
+
+    .snippet-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1rem .75rem;
+    }
+
+    .snippet-code {
+        margin: 0;
+        padding: 0 1rem 1rem;
+        font-size: .875rem;
+        color: var(--bs-fg-body);
+    }
+
+    .repo-list {
+        margin-top: .75rem;
+    }
+
+    .repo-list .list-group-item {
+        padding: 0;
+    }
+
+    .repo-link {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        padding: .75rem 1rem;
+        color: var(--bs-fg-body);
+        text-decoration: none;
+    }
+
+    .repo-link:hover {
+        background: var(--bs-bg-1);
+    }
+
+    .repo-link:focus-visible {
+        outline: var(--bs-focus-ring);
+        outline-offset: -3px;
+    }
+
+    .repo-link .badge {
+        min-width: 7.5rem;
+    }
+
+    .repo-url {
+        flex: 1;
+        min-width: 0;
+        font-size: .9375rem;
+        overflow-wrap: anywhere;
+    }
+
+    .repo-source,
+    .repo-link > .icon {
+        font-size: .8125rem;
+        color: var(--bs-fg-3);
+    }
+
+    @media (width < 36rem) {
+        .repo-link {
+            flex-wrap: wrap;
+        }
+
+        .repo-url {
+            flex-basis: 100%;
+            order: 3;
+        }
+
+        .repo-source {
+            margin-inline-start: auto;
+        }
+    }
+
+    .empty-state {
+        margin-top: .75rem;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        border: var(--bs-border-width) dashed var(--bs-border-color);
+        border-radius: var(--bs-radius-7);
+    }
+
+    .empty-state-title {
+        margin-bottom: .25rem;
+        font-weight: 600;
+    }
+
+    /* Forms */
+    .form-panel {
+        max-width: 40rem;
+    }
+
+    .form-panel-wide {
+        max-width: 48rem;
+    }
+
+    .form-section + .form-section {
+        margin-top: 1.5rem;
+    }
+
+    .form-section > legend {
+        padding-bottom: .5rem;
+        margin-bottom: 1.25rem;
+        border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+    }
+
+    /* Legends of collection fields look like the labels of the other fields. */
+    .form-section fieldset > legend {
+        margin-bottom: .5rem;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    /* Switch rows: keep label and help text together. */
+    .form-field {
+        row-gap: .125rem;
+    }
+
+    .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: .5rem;
+        margin-top: 1.5rem;
+    }
+
+    .form-actions-sticky {
+        position: sticky;
+        bottom: 0;
+        z-index: 2;
+        padding-block: .75rem;
+        margin-top: 2rem;
+        background: var(--bs-bg-body);
+        border-top: var(--bs-border-width) solid var(--bs-border-color);
+    }
+
+    .collection {
+        display: grid;
+        gap: .5rem;
+        justify-items: start;
+    }
+
+    .collection-entries {
+        display: grid;
+        gap: .5rem;
+        width: 100%;
+    }
+
+    .collection-entries:empty {
+        display: none;
+    }
+
+    .collection-entry {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: .5rem;
+    }
+
+    .collection-entry-field {
+        flex: 1 1 10rem;
+        min-width: 0;
+    }
+
+    .collection-entry-field:first-child {
+        flex-grow: 2;
+    }
+
+    .collection-entry .form-control {
+        font-family: var(--bs-font-mono);
+    }
+
+    .delete-target {
+        padding: .75rem 1rem;
+        overflow-wrap: anywhere;
+        background: var(--bs-danger-bg-subtle);
+        border: var(--bs-border-width) solid var(--bs-danger-border);
+        border-radius: var(--bs-radius-5);
+    }
+
+    .login {
+        max-width: 24rem;
+        margin: 2rem auto 0;
+    }
+
+    .login .form-panel {
+        margin-top: 1.5rem;
+    }
+
+    /* Build console: dark in light and dark mode alike. */
+    .console {
+        --console-bg: #14171c;
+        --console-fg: #d6dde3;
+        --console-muted: #8d98a3;
+
+        overflow: hidden;
+        color: var(--console-fg);
+        background: var(--console-bg);
+        border-radius: var(--bs-radius-7);
+        color-scheme: dark;
+    }
+
+    .console-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: .5rem 1rem;
+        padding: .625rem 1rem;
+        border-bottom: 1px solid rgb(255 255 255 / 8%);
+    }
+
+    .console-title {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        margin: 0;
+        font: 500 .8125rem/1.5 var(--bs-font-mono);
+        color: var(--console-muted);
+    }
+
+    .console-status {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        font-size: .8125rem;
+        font-weight: 600;
+    }
+
+    .console-status::before {
+        width: .5rem;
+        height: .5rem;
+        content: "";
+        background: currentcolor;
+        border-radius: 50%;
+    }
+
+    .console[data-state="running"] .console-status {
+        color: var(--bs-amber-300);
+    }
+
+    .console[data-state="running"] .console-status::before {
+        animation: console-pulse 1.2s ease-in-out infinite;
+    }
+
+    .console[data-state="success"] .console-status {
+        color: var(--bs-teal-300);
+    }
+
+    .console[data-state="failed"] .console-status {
+        color: var(--bs-red-300);
+    }
+
+    .console-output {
+        min-height: 16rem;
+        padding: 1rem;
+        margin: 0;
+        overflow: visible;
+        font-size: .8125rem;
+        line-height: 1.6;
+        color: inherit;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    .console-command {
+        color: var(--bs-teal-300);
+    }
+
+    .console-command::before {
+        color: var(--console-muted);
+        content: "$ ";
+    }
+
+    @keyframes console-pulse {
+        50% { opacity: .3; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .console[data-state="running"] .console-status::before {
+            animation: none;
+        }
+    }
+}

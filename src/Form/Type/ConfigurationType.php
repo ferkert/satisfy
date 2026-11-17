@@ -45,9 +45,6 @@ class ConfigurationType extends AbstractType
                 'delete_empty' => true,
                 'entry_type' => PackageConstraintType::class,
                 'prototype' => true,
-                'attr' => [
-                    'class' => 'collection_require',
-                ],
                 'constraints' => [
                     new Assert\Valid(),
                 ],
@@ -59,11 +56,7 @@ class ConfigurationType extends AbstractType
                 'delete_empty' => true,
                 'entry_type' => PackageConstraintType::class,
                 'prototype' => true,
-                'attr' => [
-                    'class' => 'collection_require',
-                    'rel' => 'tooltip',
-                    'data-title' => 'Package name (keys) and version constraints (values) to exclude after selecting packages',
-                ],
+                'help' => 'Package versions to exclude after the packages above have been selected.',
                 'constraints' => [
                     new Assert\Valid(),
                 ],
@@ -75,30 +68,18 @@ class ConfigurationType extends AbstractType
                 'delete_empty' => true,
                 'entry_type' => AbandonedType::class,
                 'prototype' => true,
-                'attr' => [
-                    'class' => 'collection_require',
-                    'rel' => 'tooltip',
-                    'data-title' => 'List of packages marked as abandoned for this repository',
-                ],
+                'help' => 'Packages to mark as abandoned, optionally with a replacement package.',
                 'constraints' => [
                     new Assert\Valid(),
                 ],
             ])
             ->add('requireAll', Type\CheckboxType::class, [
                 'required' => false,
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => 'selects all versions of all packages in the repositories you defined',
-                ],
+                'help' => 'Select all versions of all packages in the configured repositories.',
             ])
             ->add('requireDependencies', Type\CheckboxType::class, [
                 'required' => false,
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => <<<END
-satis will attempt to resolve all the required packages from the listed repositories
-END,
-                ],
+                'help' => 'Resolve all dependencies of the selected packages from the configured repositories.',
             ])
             ->add('requireDevDependencies', Type\CheckboxType::class, [
                 'required' => false,
@@ -120,21 +101,13 @@ END,
                 'delete_empty' => true,
                 'entry_type' => PackageStabilityType::class,
                 'prototype' => true,
-                'attr' => [
-                    'class' => 'collection_require',
-                ],
                 'constraints' => [
                     new Assert\Valid(),
                 ],
             ])
             ->add('includeFilename', TextType::class, [
                 'required' => false,
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => <<<END
-Specify filename instead of default include/all\${SHA1_HASH}.json
-END,
-                ],
+                'help' => 'Filename of the include file. Default: include/all${SHA1_HASH}.json',
             ])
             ->add('outputDir', TextType::class, [
                 'required' => true,
@@ -142,59 +115,41 @@ END,
                     new Assert\NotBlank(),
                 ],
                 'empty_data' => Configuration::DEFAULT_OUTPUT_DIR,
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => <<<END
-defines where to output the repository files if not provided as an argument when calling the build command
-END,
-                ],
+                'help' => 'Where the build writes the repository files, unless the build command is given another path.',
             ])
             ->add('outputHtml', Type\CheckboxType::class, [
                 'required' => false,
                 'label' => 'Output HTML',
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => 'If enabled, build a static web page',
-                ],
+                'help' => 'Build a static web page that lists all packages.',
             ])
             ->add('providers', Type\CheckboxType::class, [
                 'required' => false,
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => 'If enabled, dump package providers',
-                ],
+                'help' => 'Dump package providers.',
             ])
             ->add('config', TextareaType::class, [
                 'required' => false,
                 'empty_data' => '',
                 'trim' => true,
+                'help' => 'Composer configuration options as JSON.',
                 'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => 'a configuration options in json format',
+                    'rows' => 6,
+                    'class' => 'font-monospace',
+                    'spellcheck' => 'false',
                 ],
             ])
             ->add('twigTemplate', TextType::class, [
                 'required' => false,
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => 'a path to a personalized Twig template for the output-dir/index.html page',
-                ],
+                'help' => 'Path to a custom Twig template for the generated index.html page.',
             ])
             ->add('notifyBatch', UrlType::class, [
                 'label' => 'Notify batch URL',
                 'required' => false,
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => 'specify a URL that will be called every time a user installs a package',
-                ],
+                'help' => 'URL that is called every time a user installs a package.',
             ])
             ->add('prettyPrint', Type\CheckboxType::class, [
                 'label' => 'Pretty print',
                 'required' => false,
-                'attr' => [
-                    'rel' => 'tooltip',
-                    'data-title' => 'when not checked, the JSON_PRETTY_PRINT option will not be used on encoding.',
-                ],
+                'help' => 'Write indented JSON files (JSON_PRETTY_PRINT).',
             ]);
         $builder->get('config')->addModelTransformer(new JsonTextTransformer());
     }

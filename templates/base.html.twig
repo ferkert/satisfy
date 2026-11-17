@@ -1,73 +1,81 @@
+{%- from '_icons.html.twig' import icon -%}
+{%- set route = app.request ? app.request.attributes.get('_route', '') : '' -%}
+{%- set alert_themes = {success: 'success', info: 'info', notice: 'info', warning: 'warning', error: 'danger', danger: 'danger'} -%}
+{%- set alert_icons = {success: 'check-circle-fill', info: 'info-circle-fill', warning: 'exclamation-triangle-fill', danger: 'x-circle-fill'} -%}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Satisfy{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}">
+    <script src="{{ asset('js/app.js') }}" defer></script>
+</head>
+<body>
+    <a class="visually-hidden-focusable skip-link" href="#main">Skip to content</a>
 
-    <!-- Loading Bootstrap -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}">
+    <header class="app-header">
+        <div class="container app-header-inner">
+            <a class="app-brand" href="{{ path('repository') }}">
+                {{ icon('box-seam') }}
+                <span>Satisfy</span>
+            </a>
+            {% if satis.name %}
+                <span class="app-repo-name font-monospace">{{ satis.name }}</span>
+            {% endif %}
 
-    <style type="text/css">
-      h1 {
-        text-align: center;
-      }
+            <nav class="app-nav" aria-label="Main">
+                <ul class="nav nav-underline">
+                    {% for item in [
+                        {label: 'Repositories', route: 'repository', active: route starts with 'repository'},
+                        {label: 'Configuration', route: 'configuration', active: route == 'configuration'},
+                        {label: 'Build', route: 'satis_build', active: route starts with 'satis_build'},
+                    ] %}
+                        <li class="nav-item">
+                            <a class="nav-link{{ item.active ? ' active' }}" href="{{ path(item.route) }}"{% if item.active %} aria-current="page"{% endif %}>{{ item.label }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
 
-      h1 > a {
-        text-decoration: none;
-      }
-
-        h2 {
-          margin-bottom: 19px;
-          text-align: center;
-        }
-
-      form {
-        padding: 19px 29px 29px;
-        margin: 10px auto 20px;
-        background-color: #edeff1;
-        border: 1px solid #e5e5e5;
-        margin-bottom: 10px;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-      }
-    </style>
-  </head>
-    <body>
-        <div class="container">
-            <a class="btn" href="{{ path('index') }}">Home page</a>
-            | <a class="btn" href="{{ path('repository') }}">Admin home page</a>
-            {% if is_granted('IS_AUTHENTICATED_FULLY')  %} | <a class="btn" href="{{ path('_logout_main') }}">Logout</a>{% endif %}
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-dismissible alert-{{ label }}" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <i class="glyphicon glyphicon-{{ label }}-sign">&nbsp;</i>
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-            <h1>
-                {% block header %}
-                    <a href="{{ path('repository') }}">
-                        {{ satis.name }}
+            <div class="app-header-end">
+                <a class="btn btn-sm btn-text theme-secondary" href="{{ path('index') }}">
+                    Package page {{ icon('box-arrow-up-right') }}
+                </a>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a class="btn btn-sm btn-text theme-secondary" href="{{ path('_logout_main') }}">
+                        {{ icon('box-arrow-right') }} Log out
                     </a>
-                {% endblock %}
-            </h1>
-            {% block content %}
-            {% endblock %}
+                {% endif %}
+            </div>
         </div>
+    </header>
 
-        <script src="{{ asset('js/jquery-2.2.4.min.js') }}"></script>
-        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-        {% block javascript %}{% endblock %}
-        <script>
-            $('[rel=tooltip]').tooltip();
-        </script>
-    </body>
+    <main class="container app-main" id="main">
+        {% for type, messages in app.flashes %}
+            {% set theme = alert_themes[type] ?? 'info' %}
+            {% for message in messages %}
+                <div class="alert theme-{{ theme }}" role="{{ theme in ['warning', 'danger'] ? 'alert' : 'status' }}">
+                    {{ icon(alert_icons[theme]) }}
+                    <div>{{ message }}</div>
+                    <button type="button" class="btn-close ms-auto" data-dismiss="alert" aria-label="Dismiss"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% block page_header %}
+            <div class="page-header">
+                <div class="page-heading">
+                    <h1>{% block heading %}{{ block('title') }}{% endblock %}</h1>
+                    {% block lead %}{% endblock %}
+                </div>
+                <div class="page-actions">{% block actions %}{% endblock %}</div>
+            </div>
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
 </html>

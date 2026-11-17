@@ -1,0 +1,94 @@
+{#
+ # Form theme for Bootstrap 6.
+ #
+ # Symfony ships no Bootstrap 6 theme yet. Most Bootstrap 5 form markup still applies
+ # (form-control, form-label, form-text, invalid-feedback), so this theme extends the
+ # Bootstrap 5 layout and only replaces what changed in v6: checkboxes, selects and
+ # alerts. It also renders collections for public/js/app.js (add and remove entries).
+ #}
+{% extends 'bootstrap_5_layout.html.twig' %}
+
+{# Selects: v6 styles <select class="form-control">, "form-select" is gone. #}
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) -%}
+    {{- parent() -}}
+{%- endblock choice_widget_collapsed -%}
+
+{# Checkboxes render as switches: every checkbox in this app is an on/off setting. #}
+{%- block checkbox_widget -%}
+    <span class="switch">
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}>
+    </span>
+{%- endblock checkbox_widget -%}
+
+{%- block checkbox_label -%}
+    {%- if label is not same as(false) -%}
+        <label for="{{ id }}"{% with {attr: label_attr} %}{{ block('attributes') }}{% endwith %}>
+            {{- block('form_label_content') -}}
+        </label>
+    {%- endif -%}
+{%- endblock checkbox_label -%}
+
+{%- block checkbox_row -%}
+    <div{% with {attr: row_attr|merge({class: (row_attr.class|default('mb-3') ~ ' form-field')|trim})} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_widget(form) -}}
+        {{- form_label(form) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock checkbox_row -%}
+
+{# Errors: v6 alerts take a theme class instead of "alert-danger". #}
+{%- block form_errors -%}
+    {%- for error in errors -%}
+        {%- if form is rootform -%}
+            <div class="alert theme-danger" role="alert" id="{{ id ~ '_error' ~ loop.index }}">{{ error.message }}</div>
+        {%- else -%}
+            <div class="invalid-feedback d-block" id="{{ id ~ '_error' ~ loop.index }}">{{ error.message }}</div>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock form_errors -%}
+
+{# Collections: entries plus an "Add" button, wired up in public/js/app.js. #}
+{%- block collection_widget -%}
+    {% from '_icons.html.twig' import icon %}
+    {%- set next_index = 0 -%}
+    {%- for child in form -%}
+        {%- set next_index = max(next_index, child.vars.name + 1) -%}
+    {%- endfor -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' collection')|trim, 'data-collection': '', 'data-next-index': next_index}) -%}
+    {%- if prototype is defined and not prototype.rendered -%}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype), 'data-prototype-name': prototype.vars.name}) -%}
+    {%- endif -%}
+    <div {{ block('widget_container_attributes') }}>
+        <div class="collection-entries" data-collection-entries>
+            {%- for child in form -%}
+                {{- form_row(child) -}}
+            {%- endfor -%}
+        </div>
+        {%- if allow_add -%}
+            <button type="button" class="btn btn-sm btn-outline theme-secondary" data-collection-add>
+                {{ icon('plus-lg') }} Add entry
+            </button>
+        {%- endif -%}
+    </div>
+{%- endblock collection_widget -%}
+
+{%- block collection_entry_row -%}
+    {% from '_icons.html.twig' import icon %}
+    <div class="collection-entry" data-collection-entry>
+        {%- for child in form -%}
+            <div class="collection-entry-field">
+                {{- form_label(child, null, {label_attr: {class: 'visually-hidden'}}) -}}
+                {{- form_widget(child) -}}
+                {{- form_errors(child) -}}
+            </div>
+        {%- endfor -%}
+        {%- if form.parent.vars.allow_delete|default(false) -%}
+            <button type="button" class="btn btn-icon btn-text theme-danger" data-collection-remove aria-label="Remove entry">
+                {{ icon('trash3') }}
+            </button>
+        {%- endif -%}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock collection_entry_row -%}

@@ -1,27 +1,59 @@
 {% extends "base.html.twig" %}
-{% form_theme form 'form/jquery.collection.html.twig' 'form/fields.html.twig' %}
 
-{% block title %}Edit configuration{% endblock %}
+{% block title %}Configuration{% endblock %}
 
-{% block content %}
-    {{ form_start(form, { attr: { class: 'form-horizontal' }}) }}
-    <h2 class="form-signin-heading">Edit configuration</h2>
-    {{ form_errors(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-large btn-block btn-primary" type="submit">Submit</button>
-    {{ form_end(form) }}
+{% block lead %}
+    <p class="page-lead">Settings for <span class="font-monospace">satis.json</span>. Changes apply with the next build.</p>
 {% endblock %}
 
-{% block javascript %}
-    {{ parent() }}
-    <script src="{{ asset('js/jquery.collection.js') }}"></script>
-    <script type="text/javascript">
-        $(".collection_require").collection({
-            add: '<p class="col-sm-2"><button class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button></p>',
-            remove: '<button class="btn btn-default"><i class="glyphicon glyphicon-minus"></i></button>',
-            allow_down: false,
-            allow_up: false,
-            add_at_the_end: true
-        });
-    </script>
+{% block content %}
+    {{ form_start(form, {attr: {class: 'form-panel form-panel-wide'}}) }}
+        {{ form_errors(form) }}
+
+        <fieldset class="form-section">
+            <legend class="section-title">Repository</legend>
+            {{ form_row(form.name, {help: 'Vendor and name, for example acme/packages.'}) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.homepage, {help: 'Public URL of this package repository.'}) }}
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend class="section-title">Package selection</legend>
+            {{ form_row(form.requireAll) }}
+            {{ form_row(form.requireDependencies) }}
+            {{ form_row(form.requireDevDependencies) }}
+            {{ form_row(form.requireDependencyFilter) }}
+            {{ form_row(form.require) }}
+            {{ form_row(form.blacklist) }}
+            {{ form_row(form.abandoned) }}
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend class="section-title">Stability</legend>
+            {{ form_row(form.minimumStability) }}
+            {{ form_row(form.minimumStabilityPerPackage) }}
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend class="section-title">Output</legend>
+            {{ form_row(form.outputDir) }}
+            {{ form_row(form.outputHtml) }}
+            {{ form_row(form.prettyPrint) }}
+            {{ form_row(form.providers) }}
+            {{ form_row(form.includeFilename) }}
+            {{ form_row(form.twigTemplate) }}
+            {{ form_row(form.notifyBatch) }}
+        </fieldset>
+
+        <fieldset class="form-section">
+            <legend class="section-title">Advanced</legend>
+            {{ form_row(form.config) }}
+            {{ form_rest(form) }}
+        </fieldset>
+
+        <div class="form-actions form-actions-sticky">
+            <button class="btn btn-solid theme-primary" type="submit">Save configuration</button>
+            <a href="{{ path('repository') }}" class="btn btn-text theme-secondary">Cancel</a>
+        </div>
+    {{ form_end(form) }}
 {% endblock %}

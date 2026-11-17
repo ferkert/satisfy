@@ -1,3 +1,7 @@
 {{ form_errors(form) }}
-{{ form_row(form.type, {'label': 'Type'}) }}
-{{ form_row(form.url, {'label': 'URL'}) }}
+{{ form_row(form.type, {label: 'Type'}) }}
+{{ form_row(form.url, {label: 'URL', attr: form.url.vars.attr|merge({class: 'font-monospace'})}) }}
+{{ form_row(form.installationSource, {
+    label: 'Installation source',
+    help: 'dist installs archives, source clones the repository.',
+}) }}
