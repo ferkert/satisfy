@@ -2,6 +2,7 @@
 
 namespace Playbloom\Tests\Webhook;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Playbloom\Controller\WebhookController;
 use Playbloom\Model\Repository;
 use Playbloom\Process\ProcessFactory;
@@ -28,9 +29,7 @@ class BitbucketWebhookTest extends KernelTestCase
         self::bootKernel();
     }
 
-    /**
-     * @dataProvider invalidRequestProvider
-     */
+    #[DataProvider('invalidRequestProvider')]
     public function testInvalidRequestMustThrowException($request): void
     {
         $this->expectException(BadRequestHttpException::class);

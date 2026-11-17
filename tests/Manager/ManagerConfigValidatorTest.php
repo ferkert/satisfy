@@ -3,6 +3,7 @@
 namespace Playbloom\Tests\Manager;
 
 use org\bovigo\vfs\vfsStreamFile;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Playbloom\Model\Configuration;
 use Playbloom\Persister\JsonPersister;
@@ -34,9 +35,7 @@ class ManagerConfigValidatorTest extends TestCase
         $this->vfsTearDown();
     }
 
-    /**
-     * @dataProvider configFileProvider
-     */
+    #[DataProvider('configFileProvider')]
     public function testConfigIsMatchingSatisSchema($configFilename): void
     {
         $this->assertTrue(copy($configFilename, $this->config->url()));

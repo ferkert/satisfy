@@ -2,6 +2,7 @@
 
 namespace Playbloom\Tests\Webhook;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Playbloom\Event\BuildEvent;
 use Playbloom\Model\Repository;
@@ -19,9 +20,7 @@ class GithubWebhookTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @dataProvider invalidRequestProvider
-     */
+    #[DataProvider('invalidRequestProvider')]
     public function testInvalidRequest($request): void
     {
         $this->expectException(BadRequestHttpException::class);

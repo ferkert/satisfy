@@ -3,6 +3,7 @@
 namespace Playbloom\Tests\Composer\Satis\Command;
 
 use Composer\Satis\Console\Application;
+use Composer\Util\ErrorHandler;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
@@ -46,7 +47,23 @@ class BuildCommandTest extends KernelTestCase
     protected function tearDown(): void
     {
         $this->vfsRoot = null;
+        self::restoreComposerErrorHandlers();
         parent::tearDown();
+    }
+
+    /**
+     * Satis registers Composer's error handler on every run and never removes it.
+     */
+    private static function restoreComposerErrorHandlers(): void
+    {
+        while (true) {
+            $current = set_error_handler(null);
+            restore_error_handler();
+            if ([ErrorHandler::class, 'handle'] !== $current) {
+                return;
+            }
+            restore_error_handler();
+        }
     }
 
     public function testMissingConfigBuildMustFail()

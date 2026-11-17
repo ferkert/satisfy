@@ -16,7 +16,8 @@ hooks:
 omit_containers: [db]
 use_dns_when_possible: true
 timezone: Europe/Berlin
-composer_version: "2"
+# keep in sync with "composer/composer" in composer.json / composer.lock
+composer_version: "2.11.2"
 web_environment: []
 corepack_enable: false
 

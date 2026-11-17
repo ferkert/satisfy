@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace Playbloom\Tests\Webhook;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Playbloom\Event\BuildEvent;
 use Playbloom\Model\Repository;
@@ -24,9 +25,7 @@ class DevOpsWebhookTest extends TestCase
 
     protected const secret = '12345';
 
-    /**
-     * @dataProvider invalidRequestProvider
-     */
+    #[DataProvider('invalidRequestProvider')]
     public function testInvalidRequest(Request $request): void
     {
         $this->expectException(BadRequestHttpException::class);
