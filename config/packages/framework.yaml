@@ -18,8 +18,6 @@ framework:
         log: true
 
     assets: ~
-    profiler:
-        collect: false
 
 when@test:
     framework:
