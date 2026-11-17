@@ -1,0 +1,191 @@
+{#
+ # Package page (public/index.html), rendered by Satis during the build, not by Symfony.
+ #
+ # Enabled with "twig-template": "templates/package_page.html.twig" in satis.json
+ # (Configuration → Twig template). Satis loads templates from this directory, so the
+ # page can use the icon macros. Variables come from Composer\Satis\Builder\WebBuilder:
+ # name, url, description, packages, dependencies, blockIndexing.
+ #
+ # Asset paths are relative because Satisfy serves this file at its root URL.
+ #}
+{%- from '_icons.html.twig' import icon -%}
+{%- from _self import version_button -%}
+{%- set title = name|default('Composer repository') -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ description ? description|striptags : 'Private Composer repository' }}">
+    {% if blockIndexing %}<meta name="robots" content="noindex,nofollow">{% endif %}
+    <title>{{ title }}</title>
+    <link rel="icon" href="favicon.ico" sizes="32x32">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/app.css">
+    <script src="js/app.js" defer></script>
+</head>
+<body>
+    <a class="visually-hidden-focusable skip-link" href="#main">Skip to content</a>
+
+    <header class="app-header">
+        <div class="container app-header-inner">
+            <a class="app-brand" href="./">
+                {{ icon('box-seam') }}
+                <span>{{ title }}</span>
+            </a>
+            <div class="app-header-end">
+                <a class="btn btn-sm btn-text theme-secondary" href="admin">Manage repository</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container app-main" id="main">
+        <div class="page-header">
+            <div class="page-heading">
+                <h1>Packages</h1>
+                <p class="page-lead">
+                    {{ description ? description|striptags : 'Private Composer packages served by this repository.' }}
+                </p>
+            </div>
+        </div>
+
+        <section class="snippet" aria-labelledby="snippet-title">
+            <div class="snippet-header">
+                <div>
+                    <h2 class="section-title" id="snippet-title">Use this repository</h2>
+                    <p class="section-text">Add this to the <span class="font-monospace">composer.json</span> of a project. To copy a require line, select a version below.</p>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline theme-secondary" data-copy="#composer-snippet" hidden>
+                    {{ icon('clipboard') }} <span data-copy-label aria-live="polite">Copy</span>
+                </button>
+            </div>
+            <pre class="snippet-code"><code id="composer-snippet">{{ {repositories: [{type: 'composer', url: url}]}|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES')) }}</code></pre>
+        </section>
+
+        {% if packages is empty %}
+            <div class="empty-state">
+                <p class="empty-state-title">No packages yet</p>
+                <p class="section-text">The last build found no packages in the configured repositories.</p>
+            </div>
+        {% else %}
+            <div class="package-search">
+                <label class="form-label" for="package-filter">Filter packages</label>
+                <input type="search" id="package-filter" class="form-control" placeholder="Name, description, keyword or type" autocomplete="off" data-package-filter>
+                <p class="package-count" data-package-count aria-live="polite">{{ packages|length }} {{ packages|length == 1 ? 'package' : 'packages' }}</p>
+            </div>
+
+            <ul class="package-list" id="package-list">
+                {% for name, package in packages %}
+                    {%- set p = package.highest -%}
+                    {%- set search = [p.name, p.description, (p.keywords ?? [])|join(' '), p.type, (p.authors ?? [])|map(a => (a.name ?? ''))|join(' ')]|join(' ')|lower -%}
+                    {%- set required_by = dependencies[name] ?? [] -%}
+                    <li class="package" id="{{ p.name }}" data-package="{{ search }}">
+                        <div class="package-head">
+                            <h2 class="package-name font-monospace"><a href="#{{ p.name }}">{{ p.name }}</a></h2>
+                            <div class="package-meta">
+                                {% if p.type %}<span class="badge badge-subtle theme-secondary">{{ p.type }}</span>{% endif %}
+                                {% if p.license %}<span class="badge badge-subtle theme-secondary">{{ p.license|join(', ') }}</span>{% endif %}
+                            </div>
+                        </div>
+
+                        {% if package.abandoned %}
+                            <p class="package-abandoned">
+                                Abandoned.
+                                {% if package.replacement %}
+                                    Use <span class="font-monospace">{{ package.replacement }}</span> instead.
+                                {% else %}
+                                    No replacement was suggested.
+                                {% endif %}
+                            </p>
+                        {% endif %}
+
+                        {% if p.description %}
+                            <p class="package-description">{{ p.description }}</p>
+                        {% endif %}
+
+                        {% set visible_versions = package.versions|slice(0, 12) %}
+                        {% set hidden_versions = package.versions|slice(12) %}
+                        <div class="package-versions">
+                            {% for version in visible_versions %}
+                                {{ version_button(p, version) }}
+                            {% endfor %}
+                        </div>
+                        {% if hidden_versions is not empty %}
+                            <details class="package-more">
+                                <summary>{{ hidden_versions|length }} more {{ hidden_versions|length == 1 ? 'version' : 'versions' }}</summary>
+                                <div class="package-versions">
+                                    {% for version in hidden_versions %}
+                                        {{ version_button(p, version) }}
+                                    {% endfor %}
+                                </div>
+                            </details>
+                        {% endif %}
+
+                        {% if p.homepage or p.authors or p.support or p.keywords or required_by or p.distUrl %}
+                            <details class="package-details">
+                                <summary>Details</summary>
+                                <dl>
+                                    {% if p.homepage %}
+                                        <dt>Homepage</dt>
+                                        <dd><a href="{{ p.homepage }}">{{ p.homepage }}</a></dd>
+                                    {% endif %}
+                                    {% if p.authors %}
+                                        <dt>Authors</dt>
+                                        <dd>
+                                            {%- for author in p.authors -%}
+                                                {%- if author.homepage ?? false -%}
+                                                    <a href="{{ author.homepage }}">{{ author.name ?? '' }}</a>
+                                                {%- else -%}
+                                                    {{ author.name ?? '' }}
+                                                {%- endif -%}
+                                                {%- if not loop.last %}, {% endif -%}
+                                            {%- endfor -%}
+                                        </dd>
+                                    {% endif %}
+                                    {% if p.keywords %}
+                                        <dt>Keywords</dt>
+                                        <dd>{{ p.keywords|sort|join(', ') }}</dd>
+                                    {% endif %}
+                                    {% if p.support %}
+                                        <dt>Support</dt>
+                                        <dd>
+                                            {%- for support_type, support_url in p.support -%}
+                                                <a href="{{ support_url }}">{{ support_type|capitalize }}</a>{% if not loop.last %}, {% endif %}
+                                            {%- endfor -%}
+                                        </dd>
+                                    {% endif %}
+                                    {% if required_by %}
+                                        <dt>Required by</dt>
+                                        <dd class="font-monospace">
+                                            {%- for dependency in required_by -%}
+                                                <a href="#{{ dependency }}">{{ dependency }}</a>{% if not loop.last %}, {% endif %}
+                                            {%- endfor -%}
+                                        </dd>
+                                    {% endif %}
+                                    {% if p.distUrl %}
+                                        <dt>Download</dt>
+                                        <dd><a href="{{ p.distUrl }}">{{ p.prettyVersion }} ({{ p.distType }})</a></dd>
+                                    {% endif %}
+                                </dl>
+                            </details>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            <p class="empty-state" data-package-empty hidden>No package matches the filter.</p>
+        {% endif %}
+
+        <p class="visually-hidden" aria-live="polite" data-copy-status></p>
+    </main>
+
+    <footer class="container app-footer">
+        Built with Satis on <time datetime="{{ 'now'|date('c') }}">{{ 'now'|date('j M Y, H:i T') }}</time>.
+    </footer>
+</body>
+</html>
+
+{%- macro version_button(package, version) -%}
+    {%- set alias = version.extra['branch-alias'][version.prettyVersion] ?? null -%}
+    <button type="button" class="package-version" data-copy-text="&quot;{{ package.name }}&quot;: &quot;{{ version.prettyVersion }}&quot;" title="Copy require line{{ version.releaseDate ? ', released ' ~ version.releaseDate|date('Y-m-d') }}{{ alias ? ', alias ' ~ alias }}">{{ version.prettyVersion }}</button>
+{%- endmacro -%}

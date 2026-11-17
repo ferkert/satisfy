@@ -16,6 +16,9 @@ class Configuration
 {
     public const DEFAULT_OUTPUT_DIR = 'public';
 
+    /** Satisfy's template for the package page, relative to the project root (where Satis runs). */
+    public const DEFAULT_TWIG_TEMPLATE = 'templates/package_page.html.twig';
+
     /**
      * @var string
      */

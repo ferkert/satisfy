@@ -75,8 +75,9 @@ class RepositoryControllerTest extends WebTestCase
         $config = json_decode($config, false);
         $this->assertNotEmpty($config);
 
-        // a new configuration gets the default name
+        // a new configuration gets the default name and Satisfy's package page template
         $this->assertEquals('ferkert/satisfy', $config->name);
+        $this->assertEquals('templates/package_page.html.twig', $config->{'twig-template'});
 
         self::assertObjectHasProperty('repositories', $config);
         $this->assertIsArray($config->repositories);

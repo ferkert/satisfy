@@ -3,7 +3,8 @@
  *
  * - Dismiss flash messages
  * - Add and remove entries of Symfony collection fields (see templates/form/theme.html.twig)
- * - Copy the composer.json snippet
+ * - Copy the composer.json snippet and package require lines
+ * - Filter the package list (templates/package_page.html.twig)
  * - Stream the Satis build log
  */
 (() => {
@@ -34,8 +35,53 @@
             const collection = remove.closest('[data-collection]');
             remove.closest('[data-collection-entry]').remove();
             collection.querySelector('[data-collection-add]')?.focus();
+            return;
+        }
+
+        const copyText = target.closest('[data-copy-text]');
+        if (copyText) {
+            copyRequireLine(copyText);
         }
     });
+
+    async function copyRequireLine(button) {
+        const text = button.dataset.copyText;
+        // The Clipboard API needs a secure context (HTTPS or localhost); show the line to copy by hand otherwise.
+        if (!navigator.clipboard) {
+            window.prompt('Copy this line to the "require" section of composer.json:', text);
+            return;
+        }
+        const status = document.querySelector('[data-copy-status]');
+        try {
+            await navigator.clipboard.writeText(text);
+            status.textContent = `Copied ${text}`;
+            button.classList.add('is-copied');
+            window.setTimeout(() => button.classList.remove('is-copied'), 1500);
+        } catch {
+            window.prompt('Copy this line to the "require" section of composer.json:', text);
+        }
+    }
+
+    const packageFilter = document.querySelector('[data-package-filter]');
+    if (packageFilter) {
+        const packages = [...document.querySelectorAll('[data-package]')];
+        const count = document.querySelector('[data-package-count]');
+        const empty = document.querySelector('[data-package-empty]');
+        const plural = (n) => (n === 1 ? 'package' : 'packages');
+
+        packageFilter.addEventListener('input', () => {
+            const terms = packageFilter.value.toLowerCase().split(/\s+/).filter(Boolean);
+            let visible = 0;
+            packages.forEach((item) => {
+                item.hidden = !terms.every((term) => item.dataset.package.includes(term));
+                visible += item.hidden ? 0 : 1;
+            });
+            count.textContent = terms.length
+                ? `${visible} of ${packages.length} ${plural(packages.length)}`
+                : `${packages.length} ${plural(packages.length)}`;
+            empty.hidden = visible > 0;
+        });
+    }
 
     function addCollectionEntry(collection) {
         const index = Number(collection.dataset.nextIndex || 0);

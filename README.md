@@ -80,7 +80,7 @@ For example, you can trigger a package generation for your BitBucket project by 
 
 ## Frontend
 
-The admin interface uses [Bootstrap 6](https://getbootstrap.com/) (CSS only) and a small dependency-free script, `public/js/app.js`. All files are served from `public/`; the interface loads nothing from a CDN or any other external host. Icons are inline SVGs from [Bootstrap Icons](https://icons.getbootstrap.com/) in `templates/_icons.html.twig`.
+The admin interface and the package page use [Bootstrap 6](https://getbootstrap.com/) (CSS only) and a small dependency-free script, `public/js/app.js`. All files are served from `public/`; neither page loads anything from a CDN or any other external host. Icons are inline SVGs from [Bootstrap Icons](https://icons.getbootstrap.com/) in `templates/_icons.html.twig`.
 
 Bootstrap is a pinned npm dev dependency. The copied files in `public/css/` are committed, so running Satisfy does not need Node.js. To update Bootstrap, change the version in `package.json`, then copy the new files and commit them:
 
@@ -90,6 +90,12 @@ npm run assets
 ```
 
 Bootstrap 6 relies on recent CSS features (cascade layers, `light-dark()`, relative colours), so the interface needs a current browser. It follows the system light or dark mode.
+
+### Package page
+
+Satis writes the public package page (`public/index.html`) during the build. Satisfy ships its own template for it, `templates/package_page.html.twig`, in the style of the admin interface: a package filter, versions that copy their require line, and package details.
+
+New configurations use this template automatically. For an existing `satis.json`, set *Configuration → Twig template* to `templates/package_page.html.twig` (`"twig-template"` in `satis.json`) and run a build. Leave the field empty to get the default Satis page.
 
 ## Authors
 

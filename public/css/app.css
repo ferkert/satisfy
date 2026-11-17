@@ -378,6 +378,162 @@
         margin-top: 1.5rem;
     }
 
+    /* Package page (templates/package_page.html.twig) */
+    .package-search {
+        max-width: 32rem;
+    }
+
+    .package-count {
+        margin: .375rem 0 0;
+        font-size: .875rem;
+        color: var(--bs-fg-3);
+    }
+
+    .package-list {
+        display: grid;
+        gap: .75rem;
+        padding: 0;
+        margin: 1rem 0 0;
+        list-style: none;
+    }
+
+    .package {
+        padding: 1rem 1.25rem;
+        scroll-margin-top: 1rem;
+        border: var(--bs-border-width) solid var(--bs-border-color);
+        border-radius: var(--bs-radius-7);
+    }
+
+    .package:target {
+        border-color: var(--bs-primary-border);
+        box-shadow: 0 0 0 3px var(--bs-primary-bg-subtle);
+    }
+
+    .package-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: .25rem 1rem;
+    }
+
+    .package-name {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+    .package-name a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .package-name a:hover {
+        text-decoration: underline;
+    }
+
+    .package-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .375rem;
+    }
+
+    .package-description {
+        max-width: 70ch;
+        margin: .375rem 0 0;
+        color: var(--bs-fg-2);
+    }
+
+    .package-abandoned {
+        padding: .375rem .75rem;
+        margin: .5rem 0 0;
+        font-size: .875rem;
+        color: var(--bs-danger-fg);
+        background: var(--bs-danger-bg-subtle);
+        border-radius: var(--bs-radius-5);
+    }
+
+    .package-versions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .375rem;
+        margin-top: .75rem;
+    }
+
+    .package-version {
+        padding: .125rem .5rem;
+        font: .8125rem/1.5 var(--bs-font-mono);
+        color: var(--bs-fg-body);
+        cursor: pointer;
+        background: var(--bs-bg-1);
+        border: var(--bs-border-width) solid var(--bs-border-color);
+        border-radius: var(--bs-radius-5);
+    }
+
+    .package-version:hover {
+        color: var(--bs-primary-fg);
+        border-color: var(--bs-primary-border);
+    }
+
+    .package-version:focus-visible {
+        outline: var(--bs-focus-ring);
+        outline-offset: 1px;
+    }
+
+    .package-version.is-copied {
+        color: var(--bs-primary-contrast);
+        background: var(--bs-primary-bg);
+        border-color: var(--bs-primary-bg);
+    }
+
+    .package-more,
+    .package-details {
+        margin-top: .75rem;
+        font-size: .875rem;
+    }
+
+    .package-more > summary,
+    .package-details > summary {
+        width: fit-content;
+        color: var(--bs-fg-2);
+        cursor: pointer;
+    }
+
+    .package-details dl {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: .25rem 1rem;
+        margin: .5rem 0 0;
+    }
+
+    .package-details dt {
+        font-weight: 500;
+        color: var(--bs-fg-2);
+    }
+
+    .package-details dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+    }
+
+    @media (width < 36rem) {
+        .package-details dl {
+            grid-template-columns: 1fr;
+        }
+
+        .package-details dd {
+            margin-bottom: .5rem;
+        }
+    }
+
+    .app-footer {
+        max-width: var(--app-width);
+        padding-block: 1.5rem 2rem;
+        font-size: .8125rem;
+        color: var(--bs-fg-3);
+    }
+
     /* Build console: dark in light and dark mode alike. */
     .console {
         --console-bg: #14171c;

@@ -139,7 +139,8 @@ class ConfigurationType extends AbstractType
             ])
             ->add('twigTemplate', TextType::class, [
                 'required' => false,
-                'help' => 'Path to a custom Twig template for the generated index.html page.',
+                'help' => 'Twig template for the generated index.html page. Satisfy\'s package page: '
+                    . Configuration::DEFAULT_TWIG_TEMPLATE . '. Leave empty for the Satis default page.',
             ])
             ->add('notifyBatch', UrlType::class, [
                 'label' => 'Notify batch URL',

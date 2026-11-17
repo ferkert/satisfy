@@ -173,6 +173,9 @@ class Manager
         } catch (MissingConfigException $e) {
             // use default config if file is missing or empty
             $this->configuration = new Configuration();
+            // Only new configurations get Satisfy's package page: an existing satis.json without
+            // "twig-template" keeps the Satis default, and clearing the field must stay possible.
+            $this->configuration->setTwigTemplate(Configuration::DEFAULT_TWIG_TEMPLATE);
         }
 
         return $this->configuration;
