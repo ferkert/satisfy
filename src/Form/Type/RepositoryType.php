@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class RepositoryType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $types = [
             'artifact',
@@ -45,7 +45,7 @@ class RepositoryType extends AbstractType
                     'choices' => array_combine($types, $types),
                     'constraints' => [
                         new Assert\NotBlank(),
-                        new Assert\Choice(['choices' => $types]),
+                        new Assert\Choice(choices: $types),
                     ],
                 ]
             )
@@ -80,7 +80,7 @@ class RepositoryType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [

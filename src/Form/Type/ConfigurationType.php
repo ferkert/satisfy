@@ -19,7 +19,7 @@ class ConfigurationType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name', TextType::class, [
@@ -110,7 +110,7 @@ END,
                 'required' => false,
                 'choices' => PackageStabilityType::STABILITY_LEVELS,
                 'constraints' => [
-                    new Assert\Choice(['choices' => PackageStabilityType::STABILITY_LEVELS]),
+                    new Assert\Choice(choices: PackageStabilityType::STABILITY_LEVELS),
                 ],
             ])
             ->add('minimumStabilityPerPackage', CollectionType::class, [

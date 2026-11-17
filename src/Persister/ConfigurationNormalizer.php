@@ -17,17 +17,28 @@ class ConfigurationNormalizer implements NormalizerInterface, DenormalizerInterf
     /** @var SerializerInterface */
     private $serializer;
 
-    public function normalize($object, ?string $format = null, array $context = [])
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
-        return $object;
+        return $data;
     }
 
-    public function supportsNormalization($data, ?string $format = null)
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return false;
     }
 
-    public function denormalize($data, string $type, ?string $format = null, array $context = [])
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            PackageConstraint::class . '[]' => true,
+            RepositoryInterface::class . '[]' => true,
+            PackageStability::class . '[]' => true,
+            Abandoned::class . '[]' => true,
+            \ArrayIterator::class => false,
+        ];
+    }
+
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         if ($type === PackageConstraint::class . '[]') {
             return $this->denormalizeRequire($data);
@@ -35,6 +46,10 @@ class ConfigurationNormalizer implements NormalizerInterface, DenormalizerInterf
 
         if ($type === RepositoryInterface::class . '[]') {
             return $this->denormalizeRepositories($data);
+        }
+
+        if (\ArrayIterator::class === $type) {
+            return new \ArrayIterator($this->denormalizeRepositories($data));
         }
 
         if ($type === PackageStability::class . '[]') {
@@ -52,8 +67,14 @@ class ConfigurationNormalizer implements NormalizerInterface, DenormalizerInterf
         return $data;
     }
 
-    public function supportsDenormalization($data, string $type, ?string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
+        // Configuration::$repositories is typed as "\ArrayIterator|RepositoryInterface[]". Since Symfony 7 the serializer
+        // tries the \ArrayIterator member first and would build an empty iterator, so handle it here.
+        if (\ArrayIterator::class === $type) {
+            return 'repositories' === ($context['deserialization_path'] ?? null);
+        }
+
         switch ($type) {
             case PackageConstraint::class . '[]':
             case RepositoryInterface::class . '[]':
@@ -66,7 +87,7 @@ class ConfigurationNormalizer implements NormalizerInterface, DenormalizerInterf
         return false;
     }
 
-    public function setSerializer(SerializerInterface $serializer)
+    public function setSerializer(SerializerInterface $serializer): void
     {
         $this->serializer = $serializer;
     }

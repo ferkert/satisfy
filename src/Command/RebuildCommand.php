@@ -4,27 +4,31 @@ namespace Playbloom\Command;
 
 use Composer\Json\JsonFile;
 use Composer\Satis\Console\Application;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class RebuildCommand extends Command implements ContainerAwareInterface
+#[AsCommand(
+    name: 'satisfy:rebuild',
+    description: 'Rebuild composer packages when config is changed or definitions is outdated',
+)]
+class RebuildCommand extends Command
 {
-    use ContainerAwareTrait;
+    public function __construct(
+        #[Autowire('%satis_filename%')]
+        private readonly string $satisFilename,
+    ) {
+        parent::__construct();
+    }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setName('satisfy:rebuild')
-            ->setDescription('Rebuild composer packages when config is changed or definitions is outdated')
             ->setHelp('')
             ->addArgument('file', InputArgument::OPTIONAL, 'Json file to use', './satis.json')
             ->addArgument('output-dir', InputArgument::OPTIONAL, 'Location where to output built files', null)
@@ -47,7 +51,7 @@ class RebuildCommand extends Command implements ContainerAwareInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configFile = $this->container->getParameter('satis_filename');
+        $configFile = $this->satisFilename;
         $lifetime = (int)$input->getOption('lifetime');
         $outputDir = $input->getArgument('output-dir');
 

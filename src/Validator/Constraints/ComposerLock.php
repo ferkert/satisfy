@@ -26,12 +26,4 @@ class ComposerLock extends Constraint
     {
         return self::PROPERTY_CONSTRAINT;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOption(): string
-    {
-        return '';
-    }
 }

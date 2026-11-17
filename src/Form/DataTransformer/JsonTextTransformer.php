@@ -10,7 +10,7 @@ class JsonTextTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      */
-    public function transform($value)
+    public function transform(mixed $value): mixed
     {
         if (empty($value)) {
             return '';
@@ -26,7 +26,7 @@ class JsonTextTransformer implements DataTransformerInterface
     /**
      * {@inheritDoc}
      */
-    public function reverseTransform($value)
+    public function reverseTransform(mixed $value): mixed
     {
         $value = trim($value);
         if (empty($value)) {

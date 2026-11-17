@@ -3,7 +3,6 @@
 namespace Playbloom\Tests\Composer\Satis\Command;
 
 use Composer\Satis\Console\Application;
-use Doctrine\Common\Annotations\AnnotationReader;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
@@ -61,7 +60,8 @@ class BuildCommandTest extends KernelTestCase
         $this->assertEquals(1, $exitCode);
 
         $outputContent = $output->fetch();
-        $this->assertStringStartsWith('File not found', $outputContent);
+        // with -vv, Composer plugin events (e.g. from symfony/flex) may be logged before the error
+        $this->assertStringContainsString('File not found: ' . $file, $outputContent);
     }
 
     public function testMinimalConfigBuild()
@@ -93,12 +93,12 @@ class BuildCommandTest extends KernelTestCase
         $this->vfsRoot->addChild($file);
 
         $container = self::bootKernel()->getContainer();
-        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader(new AnnotationReader()));
+        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
         $serializer = new Serializer(
             [
                 new ConfigurationNormalizer(),
                 new ObjectNormalizer(
-                    classMetadataFactory: new ClassMetadataFactory(new AttributeLoader(new AnnotationReader())),
+                    classMetadataFactory: new ClassMetadataFactory(new AttributeLoader()),
                     nameConverter: new MetadataAwareNameConverter($classMetadataFactory, new CamelCaseToSnakeCaseNameConverter()),
                     propertyTypeExtractor: new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()])
                 ),
