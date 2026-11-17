@@ -9,6 +9,10 @@ additional_fqdns: []
 database:
     type: mariadb
     version: "11.8"
+hooks:
+    post-start:
+        # composer home of the app (COMPOSER_HOME in .env), checked by the admin environment validation
+        - exec: mkdir -p var/composer
 omit_containers: [db]
 use_dns_when_possible: true
 timezone: Europe/Berlin

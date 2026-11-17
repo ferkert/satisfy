@@ -40,10 +40,14 @@ class EnvValidator
         if (!is_writable($outputDir)) {
             throw new \RuntimeException('Output (WEB) directory is read-only or missing');
         }
-        if (!is_dir($this->composerHome)) {
+        $composerHome = $this->composerHome;
+        if (!$filesystem->isAbsolutePath($composerHome)) {
+            $composerHome = $this->basePath . DIRECTORY_SEPARATOR . $composerHome;
+        }
+        if (!is_dir($composerHome)) {
             throw new \RuntimeException('Missing composer home directory');
         }
-        if (!is_writable($this->composerHome)) {
+        if (!is_writable($composerHome)) {
             throw new \RuntimeException('Composer home directory is read-only');
         }
     }
