@@ -83,6 +83,7 @@ For example, you can trigger a package generation for your BitBucket project by 
 * Ludovic Fleury - <ludo.fleury@gmail.com> - <http://twitter.com/ludofleury>
 * Julius Beckmann - <satisfy@h4cc.de> - <https://twitter.com/h4cc>
 * Ramūnas Dronga - <satisfy@ramuno.lt>
+* Vitalis Ferkert - <info@devvi.de>
 
 ## License
 

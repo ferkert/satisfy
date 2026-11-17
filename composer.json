@@ -1,5 +1,5 @@
 {
-    "name": "playbloom/satisfy",
+    "name": "ferkert/satisfy",
     "license": "MIT",
     "type": "project",
     "keywords": ["satis", "composer", "backend", "ui", "packagist", "static-packagist"],
@@ -16,6 +16,10 @@
         {
             "name": "Ramūnas Dronga",
             "email": "github@ramuno.lt"
+        },
+        {
+            "name": "Vitalis Ferkert",
+            "email": "info@devvi.de"
         }
     ],
     "support": {
