@@ -47,7 +47,7 @@ class PackageStabilityType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => PackageStability::class,
-            'empty_data' => new PackageStability('', ''),
+            'empty_data' => static fn () => new PackageStability('', ''),
         ]);
     }
 

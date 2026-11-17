@@ -41,7 +41,7 @@ class AbandonedType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Abandoned::class,
-            'empty_data' => new Abandoned('', null),
+            'empty_data' => static fn () => new Abandoned('', null),
         ]);
     }
 

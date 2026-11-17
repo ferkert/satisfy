@@ -44,7 +44,7 @@ class PackageConstraintType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => PackageConstraint::class,
-            'empty_data' => new PackageConstraint('', ''),
+            'empty_data' => static fn () => new PackageConstraint('', ''),
         ]);
     }
 
