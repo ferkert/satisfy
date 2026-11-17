@@ -1,4 +1,4 @@
-# Satisfy [![Build Status](https://travis-ci.org/ludofleury/satisfy.svg)](https://travis-ci.org/ludofleury/satisfy)
+# Satisfy [![Tests](https://github.com/ferkert/satisfy/actions/workflows/phpunit.yaml/badge.svg)](https://github.com/ferkert/satisfy/actions/workflows/phpunit.yaml)
 
 [Satis Composer repository manager](http://getcomposer.org/doc/articles/handling-private-packages-with-satis.md) with a simple web UI.
 
@@ -31,7 +31,7 @@ Basically, it just reads/writes the satis.json file and provides a web CRUD.
 
 ### Composer
 
-* Clone project `git clone https://github.com/project-satisfy/satisfy.git`
+* Clone project `git clone https://github.com/ferkert/satisfy.git`
 * Download composer `wget http://getcomposer.org/composer.phar`
 * Install `php composer.phar install -n`
 

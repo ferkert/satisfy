@@ -75,6 +75,9 @@ class RepositoryControllerTest extends WebTestCase
         $config = json_decode($config, false);
         $this->assertNotEmpty($config);
 
+        // a new configuration gets the default name
+        $this->assertEquals('ferkert/satisfy', $config->name);
+
         self::assertObjectHasProperty('repositories', $config);
         $this->assertIsArray($config->repositories);
         $this->assertEquals($url, $config->repositories[0]->url);

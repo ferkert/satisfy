@@ -19,7 +19,7 @@ class Configuration
     /**
      * @var string
      */
-    private $name = 'localhost/repository';
+    private $name = 'ferkert/satisfy';
 
     /**
      * @var string
