@@ -104,4 +104,16 @@ class RepositoryControllerTest extends WebTestCase
         $response = $client->getResponse();
         $this->assertEquals(302, $response->getStatusCode());
     }
+
+    public function testUploadWithoutFileShowsValidationError(): void
+    {
+        $client = self::createClient();
+        $crawler = $client->request('GET', '/admin/upload');
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+        $client->submit($crawler->filterXPath('//form')->form());
+
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains('form', 'This value should not be blank.');
+    }
 }

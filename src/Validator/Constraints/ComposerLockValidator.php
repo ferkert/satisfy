@@ -20,8 +20,11 @@ class ComposerLockValidator extends ConstraintValidator
      */
     public function validate(mixed $data, Constraint $constraint): void
     {
-        if (!is_object($data) || !$data instanceof UploadedFile) {
-            throw new InvalidArgumentException(sprintf('This validator expects a UploadedFile, given "%s"', get_class($data)));
+        if (null === $data) {
+            return;
+        }
+        if (!$data instanceof UploadedFile) {
+            throw new InvalidArgumentException(sprintf('This validator expects a UploadedFile, given "%s"', get_debug_type($data)));
         }
 
         $composerData = json_decode(file_get_contents($data->openFile()->getRealPath()));

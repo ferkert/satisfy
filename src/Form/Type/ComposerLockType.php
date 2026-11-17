@@ -6,6 +6,7 @@ use Playbloom\Validator\Constraints\ComposerLock;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Composer.lock upload form type.
@@ -23,6 +24,7 @@ class ComposerLockType extends AbstractType
                 [
                     'label' => false,
                     'constraints' => [
+                        new Assert\NotBlank(),
                         new ComposerLock(),
                     ],
                 ]
