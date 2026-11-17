@@ -20,7 +20,7 @@ class IndexController extends AbstractController
     {
         $indexFile = $this->projectDir . '/public/index.html';
         if (!file_exists($indexFile)) {
-            return new Response($this->render('unavailable.html.twig'));
+            return $this->render('unavailable.html.twig');
         }
 
         return new Response(file_get_contents($indexFile));
