@@ -69,36 +69,6 @@ A bin shortcut to Satis is already included in Satisfy, so run the following com
 
 For example, you can trigger a package generation for your BitBucket project by setting up a BitBucket webhook to connect back to [your-satis-url]/webhook/bitbucket every time you do a code push. This is more efficient than doing a full build and avoids you having to run full builds on a frequent schedule or logging in to the admin interface just to force a build.
 
-## Prebuilt docker image
-
-You can run satisfy using prebuilt docker image. Here is an example how to setup it.
-
-1. Create dir for configuration files
-2. Add parameters.yml file, can be copied from config/parameters.yml.dist
-3. Add auth.json with all required composer authentication tokens
-4. Add simple satis.json with basic information
-5. Create docker-compose.yml using example below
-6. Start containers `docker-compose up`
-7. Access container shell `docker-compose exec php bash`
-8. Run initial build `./bin/satis build`
-9. Open satis page on `http://localhost:8000`
-
-```
-version: '3'
-services:
-  php:
-    image: ghcr.io/project-satisfy/satisfy:latest
-    ports:
-      - "${APP_PORT:-8000}:80"
-    volumes:
-      - ./satis.json:/var/www/html/satis.json
-      - ./parameters.yml:/var/www/html/config/parameters.yml
-      - ./auth.json:/var/www/.composer/auth.json:ro
-    environment:
-      APP_ENV: ${APP_ENV:-dev}
-      APP_DEBUG: ${APP_DEBUG:-1}
-```
-
 ## Authors
 
 * Ludovic Fleury - <ludo.fleury@gmail.com> - <http://twitter.com/ludofleury>
