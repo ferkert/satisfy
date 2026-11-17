@@ -45,11 +45,20 @@ By default, the `satis.json` file is expected at the project root, but You can s
 
 ### Application configuration
 
-* Customize `app/config/parameters.yml` according to your needs.
+* Customize `config/parameters.yml` according to your needs. It is created from `config/parameters.yml.dist` on `composer install` and overrides the defaults from `config/services.yaml`.
 
 ### Security
 
-You can restrict the access setting `admin.auth` parameter (in `app/config/parameters.yml`) to `true`. Set authorized users in `admin.users` config array.
+You can restrict the access setting `admin.auth` parameter (in `config/parameters.yml`) to `true`. Set authorized users in `admin.users` config array. Passwords are stored in plain text:
+
+```yaml
+parameters:
+    admin.auth: true
+    admin.users:
+        admin:
+            password: change-me
+            roles: ROLE_ADMIN
+```
 
 ## Run Satisfy
 
