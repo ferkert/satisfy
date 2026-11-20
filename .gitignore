@@ -8,6 +8,7 @@ config/parameters.yml
 /var/*
 /.composer
 .phpunit.cache
+/auth.json
 
 # Satis default configuration
 satis.json
