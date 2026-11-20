@@ -1,0 +1,16 @@
+{#
+ # The composer.json snippet that points a project at this repository, with light syntax colouring.
+ # The copy button reads textContent, so the spans never end up in the copied JSON.
+ #
+ # Usage: {% from '_snippet.html.twig' import composer_snippet %} … {{ composer_snippet(url) }}
+ #}
+{% macro composer_snippet(url) -%}
+{
+    <span class="tok-key">"repositories"</span>: [
+        {
+            <span class="tok-key">"type"</span>: <span class="tok-str">"composer"</span>,
+            <span class="tok-key">"url"</span>: <span class="tok-str">{{ url|json_encode(constant('JSON_UNESCAPED_SLASHES')) }}</span>
+        }
+    ]
+}
+{%- endmacro %}

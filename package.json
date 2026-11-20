@@ -3,9 +3,10 @@
     "private": true,
     "description": "Frontend dependencies of Satisfy. They are copied to public/ and served from there, so the UI never loads files from a CDN.",
     "scripts": {
-        "assets": "mkdir -p public/css && cp node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/bootstrap/dist/css/bootstrap.min.css.map public/css/"
+        "assets": "mkdir -p public/css public/fonts && cp node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/bootstrap/dist/css/bootstrap.min.css.map public/css/ && cp node_modules/@fontsource-variable/recursive/files/recursive-latin-mono-normal.woff2 public/fonts/recursive.woff2 && cp node_modules/@fontsource-variable/recursive/LICENSE public/fonts/recursive-OFL.txt"
     },
     "devDependencies": {
+        "@fontsource-variable/recursive": "5.3.0",
         "bootstrap": "6.0.0-alpha.1"
     }
 }

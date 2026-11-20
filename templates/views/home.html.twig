@@ -1,5 +1,6 @@
 {% extends "base.html.twig" %}
 {% from '_icons.html.twig' import icon %}
+{% from '_snippet.html.twig' import composer_snippet %}
 
 {% block title %}Repositories{% endblock %}
 
@@ -27,7 +28,7 @@
                 {{ icon('clipboard') }} <span data-copy-label aria-live="polite">Copy</span>
             </button>
         </div>
-        <pre class="snippet-code"><code id="composer-snippet">{{ config|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES')) }}</code></pre>
+        <pre class="snippet-code"><code id="composer-snippet">{{ composer_snippet(config.repositories[0].url) }}</code></pre>
     </section>
 
     <section aria-labelledby="repositories-title">

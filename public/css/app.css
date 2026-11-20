@@ -4,25 +4,93 @@
  * Token overrides stay unlayered because Bootstrap declares its tokens unlayered too.
  * Component styles go into Bootstrap's reserved "custom" layer: they beat Bootstrap's
  * components, while Bootstrap's helpers and utilities still win over them.
+ *
+ * Palette: the lilac of PHP's elePHPant (#777bb4) on a night indigo band. Marigold is
+ * reserved for things that need attention: the active page, the latest stable release
+ * and the linked package.
  */
 
-/* Primary colour: Bootstrap's teal scale instead of the default blue. */
+/*
+ * Recursive (SIL OFL 1.1, see ../fonts/recursive-OFL.txt), copied from
+ * @fontsource-variable/recursive by "npm run assets". One variable font for prose and
+ * code: the MONO axis switches between proportional and monospaced letters.
+ */
+@font-face {
+    font-family: "Recursive";
+    font-style: normal;
+    font-weight: 300 1000;
+    font-display: swap;
+    src: url("../fonts/recursive.woff2") format("woff2-variations"),
+         url("../fonts/recursive.woff2") format("woff2");
+}
+
 :root {
-    --bs-primary-base: var(--bs-teal-600);
-    --bs-primary-fg: light-dark(var(--bs-teal-700), var(--bs-teal-300));
-    --bs-primary-fg-emphasis: light-dark(var(--bs-teal-800), var(--bs-teal-200));
-    /* teal-700 keeps white button text above 4.5:1 in both colour schemes */
-    --bs-primary-bg: var(--bs-teal-700);
-    --bs-primary-bg-subtle: light-dark(var(--bs-teal-100), var(--bs-teal-900));
-    --bs-primary-bg-muted: light-dark(var(--bs-teal-200), var(--bs-teal-800));
-    --bs-primary-border: light-dark(var(--bs-teal-300), var(--bs-teal-600));
-    --bs-primary-focus-ring: color-mix(in oklch, var(--bs-teal-500) 55%, var(--bs-bg-body));
+    --app-night: oklch(25% .09 279);
+    --app-on-night: oklch(97% .012 281);
+    --app-on-night-muted: oklch(80% .045 281);
+    --app-lilac: #777bb4;
+    --app-lilac-light: oklch(83% .075 283);
+    --app-marigold: oklch(82% .155 78);
+    --app-paper: light-dark(oklch(97.6% .008 281), oklch(16% .03 281));
+    --app-surface: light-dark(oklch(100% 0 0), oklch(20.5% .04 281));
+    --app-line: light-dark(oklch(91% .02 281), oklch(28.5% .045 281));
+    --app-radius: .875rem;
+    --app-width: 64rem;
+
+    /* Bootstrap's greys, tinted from blue-grey towards the lilac. */
+    --app-gray-base: oklch(57% .035 282);
+    --bs-gray-025: color-mix(in oklch, var(--bs-white) 94%, var(--app-gray-base));
+    --bs-gray-050: color-mix(in oklch, var(--bs-white) 90%, var(--app-gray-base));
+    --bs-gray-100: color-mix(in oklch, var(--bs-white) 80%, var(--app-gray-base));
+    --bs-gray-200: color-mix(in oklch, var(--bs-white) 60%, var(--app-gray-base));
+    --bs-gray-300: color-mix(in oklch, var(--bs-white) 40%, var(--app-gray-base));
+    --bs-gray-400: color-mix(in oklch, var(--bs-white) 20%, var(--app-gray-base));
+    --bs-gray-500: var(--app-gray-base);
+    --bs-gray-600: color-mix(in oklch, var(--bs-black) 16%, var(--app-gray-base));
+    --bs-gray-700: color-mix(in oklch, var(--bs-black) 32%, var(--app-gray-base));
+    --bs-gray-800: color-mix(in oklch, var(--bs-black) 48%, var(--app-gray-base));
+    --bs-gray-900: color-mix(in oklch, var(--bs-black) 64%, var(--app-gray-base));
+    --bs-gray-950: color-mix(in oklch, var(--bs-black) 70%, var(--app-gray-base));
+    --bs-gray-975: color-mix(in oklch, var(--bs-black) 76%, var(--app-gray-base));
+
+    /* Primary: indigo. oklch(47% …) keeps white button text near 7:1. */
+    --bs-primary-base: oklch(47% .16 279);
+    --bs-primary-bg: oklch(47% .16 279);
+    --bs-primary-contrast: var(--bs-white);
+    --bs-primary-fg: light-dark(oklch(47% .16 279), oklch(80% .09 281));
+    --bs-primary-fg-emphasis: light-dark(oklch(36% .14 279), oklch(89% .055 281));
+    --bs-primary-bg-subtle: light-dark(oklch(95% .025 281), oklch(29% .075 280));
+    --bs-primary-bg-muted: light-dark(oklch(90% .045 281), oklch(35% .095 280));
+    --bs-primary-border: light-dark(oklch(80% .07 281), oklch(50% .12 280));
+    --bs-primary-focus-ring: color-mix(in oklch, oklch(60% .17 279) 60%, var(--bs-bg-body));
     --bs-link-color: var(--bs-primary-fg);
 
-    --app-width: 64rem;
+    --bs-bg-body: var(--app-surface);
+    --bs-border-color: var(--app-line);
+
+    --bs-body-font-family: "Recursive", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --bs-font-mono: "Recursive", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --bs-body-line-height: 1.55;
+}
+
+/* Unlayered so it wins over Bootstrap's reboot, wherever that lives. */
+body {
+    background-color: var(--app-paper);
 }
 
 @layer custom {
+    /* Everything set in --bs-font-mono uses the monospaced letters of Recursive. */
+    code,
+    kbd,
+    pre,
+    samp,
+    .font-monospace,
+    .package-version,
+    .console-title,
+    .collection-entry .form-control {
+        font-variation-settings: "MONO" 1;
+    }
+
     .icon {
         flex-shrink: 0;
         width: 1em;
@@ -41,41 +109,49 @@
         border-radius: var(--bs-radius-5);
     }
 
-    /* Header */
-    .app-header {
-        background: var(--bs-bg-body);
-        border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+    /*
+     * Night band: the header, and on the package page the hero below it.
+     * color-scheme: dark makes Bootstrap's buttons and links inside pick their dark variants.
+     */
+    .app-header,
+    .hero {
+        --bs-focus-ring-color: var(--app-marigold);
+
+        color: var(--app-on-night);
+        background: var(--app-night);
+        color-scheme: dark;
     }
 
     .app-header-inner {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        column-gap: 1.5rem;
+        column-gap: 1.75rem;
         max-width: var(--app-width);
-        min-height: 3.5rem;
+        min-height: 3.75rem;
     }
 
     .app-brand {
         display: inline-flex;
         align-items: center;
         gap: .5rem;
-        font-size: 1.0625rem;
-        font-weight: 650;
-        color: var(--bs-fg-body);
+        font-size: 1.125rem;
+        font-weight: 750;
+        letter-spacing: -.01em;
+        color: inherit;
         text-decoration: none;
     }
 
     .app-brand .icon {
-        width: 1.25rem;
-        height: 1.25rem;
-        color: var(--bs-primary-fg);
+        width: 1.375rem;
+        height: 1.375rem;
+        color: var(--app-lilac-light);
     }
 
     .app-repo-name {
-        margin-inline-start: -.75rem;
+        margin-inline-start: -1rem;
         font-size: .8125rem;
-        color: var(--bs-fg-3);
+        color: var(--app-on-night-muted);
     }
 
     .app-nav {
@@ -84,7 +160,12 @@
     }
 
     .app-nav .nav {
-        --bs-nav-gap: 1.25rem;
+        --bs-nav-gap: 1.5rem;
+        --bs-nav-link-color: var(--app-on-night-muted);
+        --bs-nav-link-hover-color: var(--app-on-night);
+        --bs-nav-link-hover-bg: transparent;
+        --bs-nav-underline-link-active-color: var(--app-on-night);
+        --bs-nav-underline-border-width: .1875rem;
         flex-wrap: nowrap;
     }
 
@@ -93,6 +174,10 @@
         align-items: center;
         height: 100%;
         white-space: nowrap;
+    }
+
+    .app-nav .nav-link.active {
+        border-block-end-color: var(--app-marigold);
     }
 
     .app-header-end {
@@ -120,10 +205,56 @@
         }
     }
 
+    /* In dark mode the band sits on a dark page: a hairline keeps the edge. */
+    .app-header:not(:has(+ main > .hero:first-child)),
+    .hero {
+        border-bottom: var(--bs-border-width) solid light-dark(transparent, oklch(33% .07 280));
+    }
+
+    /* Package page hero */
+    .hero-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2rem;
+        max-width: var(--app-width);
+        padding-block: 2.5rem 3.5rem;
+    }
+
+    @media (width >= 56rem) {
+        .hero-inner {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 27rem);
+            align-items: center;
+            gap: 3rem;
+        }
+    }
+
+    .hero-title {
+        margin: 0;
+        font-size: clamp(2.125rem, 1.25rem + 3.6vw, 3.75rem);
+        font-weight: 800;
+        line-height: 1.04;
+        letter-spacing: -.03em;
+        color: var(--app-on-night);
+        overflow-wrap: anywhere;
+    }
+
+    .hero-title .package-vendor {
+        display: block;
+        font-weight: 450;
+        color: var(--app-lilac-light);
+    }
+
+    .hero-lead {
+        max-width: 44ch;
+        margin: 1.25rem 0 0;
+        font-size: 1.0625rem;
+        color: var(--app-on-night-muted);
+    }
+
     /* Page */
     .app-main {
         max-width: var(--app-width);
-        padding-block: 2rem 4rem;
+        padding-block: 2.5rem 4rem;
     }
 
     .app-main > .alert {
@@ -143,17 +274,23 @@
         margin-bottom: 2rem;
     }
 
+    .page-heading {
+        flex: 1 1 22rem;
+        min-width: 0;
+    }
+
     .page-header h1,
     .login h1 {
         margin: 0;
-        font-size: clamp(1.5rem, 1.25rem + 1vw, 1.875rem);
-        font-weight: 650;
-        letter-spacing: -.015em;
+        font-size: clamp(1.75rem, 1.35rem + 1.5vw, 2.375rem);
+        font-weight: 780;
+        line-height: 1.1;
+        letter-spacing: -.025em;
     }
 
     .page-lead {
         max-width: 60ch;
-        margin: .375rem 0 0;
+        margin: .5rem 0 0;
         color: var(--bs-fg-2);
     }
 
@@ -173,7 +310,7 @@
         gap: .5rem;
         margin: 0 0 .25rem;
         font-size: 1.0625rem;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .section-text {
@@ -182,12 +319,23 @@
         color: var(--bs-fg-2);
     }
 
-    /* Repository list */
+    /* composer.json snippet: a night panel on the page, a lighter pane inside the hero. */
     .snippet {
         margin-bottom: 2.5rem;
-        background: var(--bs-bg-1);
-        border: var(--bs-border-width) solid var(--bs-border-color);
-        border-radius: var(--bs-radius-7);
+        color: var(--app-on-night);
+        background: var(--app-night);
+        border-radius: var(--app-radius);
+        color-scheme: dark;
+    }
+
+    .hero .snippet {
+        margin: 0;
+        background: oklch(100% 0 0 / 6%);
+        box-shadow: inset 0 0 0 1px oklch(100% 0 0 / 11%);
+    }
+
+    .snippet .section-text {
+        color: var(--app-on-night-muted);
     }
 
     .snippet-header {
@@ -195,17 +343,28 @@
         align-items: flex-start;
         justify-content: space-between;
         gap: 1rem;
-        padding: 1rem 1rem .75rem;
+        padding: 1.125rem 1.25rem .5rem;
     }
 
     .snippet-code {
         margin: 0;
-        padding: 0 1rem 1rem;
+        padding: .5rem 1.25rem 1.25rem;
         font-size: .875rem;
-        color: var(--bs-fg-body);
+        line-height: 1.65;
+        color: oklch(70% .04 281);
     }
 
+    .tok-key {
+        color: var(--app-lilac-light);
+    }
+
+    .tok-str {
+        color: var(--app-on-night);
+    }
+
+    /* Repository list */
     .repo-list {
+        --bs-list-group-border-radius: var(--app-radius);
         margin-top: .75rem;
     }
 
@@ -217,13 +376,13 @@
         display: flex;
         align-items: center;
         gap: .75rem;
-        padding: .75rem 1rem;
+        padding: .875rem 1.125rem;
         color: var(--bs-fg-body);
         text-decoration: none;
     }
 
     .repo-link:hover {
-        background: var(--bs-bg-1);
+        background: var(--bs-primary-bg-subtle);
     }
 
     .repo-link:focus-visible {
@@ -248,6 +407,10 @@
         color: var(--bs-fg-3);
     }
 
+    .repo-link:hover > .icon {
+        color: var(--bs-primary-fg);
+    }
+
     @media (width < 36rem) {
         .repo-link {
             flex-wrap: wrap;
@@ -267,16 +430,20 @@
         margin-top: .75rem;
         padding: 2rem 1.5rem;
         text-align: center;
-        border: var(--bs-border-width) dashed var(--bs-border-color);
-        border-radius: var(--bs-radius-7);
+        border: 2px dashed var(--app-line);
+        border-radius: var(--app-radius);
     }
 
     .empty-state-title {
         margin-bottom: .25rem;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     /* Forms */
+    .form-control {
+        --bs-control-border-color: light-dark(var(--bs-gray-300), var(--bs-gray-700));
+    }
+
     .form-panel {
         max-width: 40rem;
     }
@@ -286,13 +453,13 @@
     }
 
     .form-section + .form-section {
-        margin-top: 1.5rem;
+        margin-top: 2rem;
     }
 
     .form-section > legend {
         padding-bottom: .5rem;
         margin-bottom: 1.25rem;
-        border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+        border-bottom: 2px solid var(--app-line);
     }
 
     /* Legends of collection fields look like the labels of the other fields. */
@@ -321,8 +488,8 @@
         z-index: 2;
         padding-block: .75rem;
         margin-top: 2rem;
-        background: var(--bs-bg-body);
-        border-top: var(--bs-border-width) solid var(--bs-border-color);
+        background: var(--app-paper);
+        border-top: var(--bs-border-width) solid var(--app-line);
     }
 
     .collection {
@@ -370,43 +537,87 @@
     }
 
     .login {
-        max-width: 24rem;
+        max-width: 26rem;
         margin: 2rem auto 0;
     }
 
     .login .form-panel {
+        padding: 1.5rem;
         margin-top: 1.5rem;
+        background: var(--app-surface);
+        border: var(--bs-border-width) solid var(--app-line);
+        border-radius: var(--app-radius);
     }
 
     /* Package page (templates/package_page.html.twig) */
+    .package-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: .75rem 1.5rem;
+    }
+
     .package-search {
-        max-width: 32rem;
+        position: relative;
+        flex: 1 1 18rem;
+        max-width: 30rem;
+    }
+
+    .package-search > .icon {
+        position: absolute;
+        top: 50%;
+        left: .9375rem;
+        color: var(--bs-fg-3);
+        pointer-events: none;
+        translate: 0 -50%;
+    }
+
+    .package-search .form-control {
+        min-height: 2.75rem;
+        padding-inline-start: 2.625rem;
+        border-radius: .625rem;
+    }
+
+    .package-status {
+        font-size: .875rem;
+        color: var(--bs-fg-3);
+    }
+
+    .package-status p {
+        margin: 0;
     }
 
     .package-count {
-        margin: .375rem 0 0;
-        font-size: .875rem;
-        color: var(--bs-fg-3);
+        font-weight: 600;
+        color: var(--bs-fg-2);
+    }
+
+    @media (width >= 48rem) {
+        .package-status {
+            text-align: end;
+        }
     }
 
     .package-list {
         display: grid;
         gap: .75rem;
         padding: 0;
-        margin: 1rem 0 0;
+        margin: 1.25rem 0 0;
         list-style: none;
     }
 
     .package {
-        padding: 1rem 1.25rem;
+        padding: 1.25rem 1.5rem 1.125rem;
         scroll-margin-top: 1rem;
-        border: var(--bs-border-width) solid var(--bs-border-color);
-        border-radius: var(--bs-radius-7);
+        background: var(--app-surface);
+        border: var(--bs-border-width) solid var(--app-line);
+        border-radius: var(--app-radius);
     }
 
     .package:target {
-        border-color: var(--bs-primary-border);
-        box-shadow: 0 0 0 3px var(--bs-primary-bg-subtle);
+        border-color: var(--app-marigold);
+        box-shadow: 0 0 0 3px color-mix(in oklch, var(--app-marigold) 40%, transparent);
     }
 
     .package-head {
@@ -419,8 +630,9 @@
 
     .package-name {
         margin: 0;
-        font-size: 1rem;
-        font-weight: 600;
+        font-size: 1.125rem;
+        font-weight: 700;
+        letter-spacing: -.01em;
         overflow-wrap: anywhere;
     }
 
@@ -431,6 +643,14 @@
 
     .package-name a:hover {
         text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-decoration-color: var(--app-lilac);
+        text-underline-offset: .2em;
+    }
+
+    .package-vendor {
+        font-weight: 450;
+        color: var(--bs-fg-3);
     }
 
     .package-meta {
@@ -458,22 +678,40 @@
         display: flex;
         flex-wrap: wrap;
         gap: .375rem;
-        margin-top: .75rem;
+        margin-top: .875rem;
     }
 
+    /* Version chips: see the version_button macro for what each kind means. */
     .package-version {
         padding: .125rem .5rem;
-        font: .8125rem/1.5 var(--bs-font-mono);
-        color: var(--bs-fg-body);
+        font: 500 .8125rem/1.5 var(--bs-font-mono);
+        color: var(--bs-fg-1);
         cursor: pointer;
-        background: var(--bs-bg-1);
-        border: var(--bs-border-width) solid var(--bs-border-color);
-        border-radius: var(--bs-radius-5);
+        background: var(--bs-primary-bg-subtle);
+        border: var(--bs-border-width) solid transparent;
+        border-radius: .375rem;
+    }
+
+    .package-version.is-latest {
+        font-weight: 700;
+        color: oklch(25% .06 70);
+        background: var(--app-marigold);
+    }
+
+    .package-version.is-pre {
+        color: var(--bs-fg-2);
+        background: transparent;
+        border-color: var(--app-line);
+    }
+
+    .package-version.is-dev {
+        color: var(--bs-fg-2);
+        background: transparent;
+        border: var(--bs-border-width) dashed light-dark(var(--bs-gray-300), var(--bs-gray-600));
     }
 
     .package-version:hover {
-        color: var(--bs-primary-fg);
-        border-color: var(--bs-primary-border);
+        border-color: var(--bs-primary-fg);
     }
 
     .package-version:focus-visible {
@@ -500,15 +738,23 @@
         cursor: pointer;
     }
 
+    .package-more > summary:hover,
+    .package-details > summary:hover {
+        color: var(--bs-primary-fg);
+    }
+
     .package-details dl {
         display: grid;
         grid-template-columns: max-content 1fr;
         gap: .25rem 1rem;
+        padding: .75rem 1rem;
         margin: .5rem 0 0;
+        background: light-dark(var(--bs-gray-025), oklch(18% .035 281));
+        border-radius: .625rem;
     }
 
     .package-details dt {
-        font-weight: 500;
+        font-weight: 600;
         color: var(--bs-fg-2);
     }
 
@@ -518,6 +764,10 @@
     }
 
     @media (width < 36rem) {
+        .package {
+            padding-inline: 1.125rem;
+        }
+
         .package-details dl {
             grid-template-columns: 1fr;
         }
@@ -534,16 +784,16 @@
         color: var(--bs-fg-3);
     }
 
-    /* Build console: dark in light and dark mode alike. */
+    /* Build console: a night panel in light and dark mode alike. */
     .console {
-        --console-bg: #14171c;
-        --console-fg: #d6dde3;
-        --console-muted: #8d98a3;
+        --console-bg: oklch(19% .055 280);
+        --console-fg: oklch(91% .02 281);
+        --console-muted: oklch(70% .045 281);
 
         overflow: hidden;
         color: var(--console-fg);
         background: var(--console-bg);
-        border-radius: var(--bs-radius-7);
+        border-radius: var(--app-radius);
         color-scheme: dark;
     }
 
@@ -553,8 +803,8 @@
         align-items: center;
         justify-content: space-between;
         gap: .5rem 1rem;
-        padding: .625rem 1rem;
-        border-bottom: 1px solid rgb(255 255 255 / 8%);
+        padding: .75rem 1.125rem;
+        background: var(--app-night);
     }
 
     .console-title {
@@ -571,7 +821,7 @@
         align-items: center;
         gap: .5rem;
         font-size: .8125rem;
-        font-weight: 600;
+        font-weight: 650;
     }
 
     .console-status::before {
@@ -583,7 +833,7 @@
     }
 
     .console[data-state="running"] .console-status {
-        color: var(--bs-amber-300);
+        color: var(--app-marigold);
     }
 
     .console[data-state="running"] .console-status::before {
@@ -600,18 +850,18 @@
 
     .console-output {
         min-height: 16rem;
-        padding: 1rem;
+        padding: 1rem 1.125rem;
         margin: 0;
         overflow: visible;
         font-size: .8125rem;
-        line-height: 1.6;
+        line-height: 1.65;
         color: inherit;
         white-space: pre-wrap;
         overflow-wrap: anywhere;
     }
 
     .console-command {
-        color: var(--bs-teal-300);
+        color: var(--app-lilac-light);
     }
 
     .console-command::before {
