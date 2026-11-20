@@ -31,7 +31,7 @@ class Archive
      * @var bool
      */
     #[SerializedName('skip-dev')]
-    private $skipDev = true;
+    private $skipDev = false;
 
     /**
      * @var array
